@@ -43,8 +43,8 @@ extension UISlider: ValidatableInterfaceElement {
         }
     }
     
-    @objc private func validate(sender: UISlider) {
-        sender.validate()
+    @objc private func validateWithRules(sender: UISlider) {
+        sender.validateWithRules()
     }
     
 }

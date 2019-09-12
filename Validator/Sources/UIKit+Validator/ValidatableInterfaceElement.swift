@@ -84,7 +84,7 @@ public protocol ValidatableInterfaceElement: AnyObject {
      A validation result.
      
      */
-    func validate<R: ValidationRule>(rule r: R) -> ValidationResult
+    func validateWithRules<R: ValidationRule>(rule r: R) -> ValidationResult
     
     /**
      
@@ -97,7 +97,7 @@ public protocol ValidatableInterfaceElement: AnyObject {
      A validation result.
      
      */
-    func validate(rules: ValidationRuleSet<InputType>) -> ValidationResult
+    func validateWithRules(rules: ValidationRuleSet<InputType>) -> ValidationResult
     
     /**
      
@@ -138,27 +138,27 @@ extension ValidatableInterfaceElement {
         }
     }
     
-    public func validate<R: ValidationRule>(rule r: R) -> ValidationResult {
+    public func validateWithRules<R: ValidationRule>(rule r: R) -> ValidationResult {
         guard let value = inputValue as? R.InputType else { return .invalid([r.error]) }
         let result = Validator.validate(input: value, rule: r)
         validationHandler?(result)
         return result
     }
     
-    public func validate(rules rs: ValidationRuleSet<InputType>) -> ValidationResult {
+    public func validateWithRules(rules rs: ValidationRuleSet<InputType>) -> ValidationResult {
         let result = Validator.validate(input: inputValue, rules: rs)
         validationHandler?(result)
         return result
     }
     
-    @discardableResult public func validate() -> ValidationResult {
+    @discardableResult public func validateWithRules() -> ValidationResult {
         guard let attachedRules = validationRules else {
             #if DEBUG
             print("Validator Error: attempted to validate without attaching rules")
             #endif
             return .valid
         }
-        return validate(rules: attachedRules)
+        return validateWithRules(rules: attachedRules)
     }
     
 }
